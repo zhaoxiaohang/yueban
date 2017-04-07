@@ -17,6 +17,9 @@ class IndexController extends Controller
     public function actionIndex()
     {
         $request = \Yii::$app ->request;
+
+        $query = $request ->get('query',null);
+
         //获取session中用户id和用户名
         $session = \Yii::$app ->session;
         $arr_user = array();
@@ -44,11 +47,26 @@ class IndexController extends Controller
         $int_pageTotal = ceil($int_planCount/$pageSize);
 
         //发布信息
-        $arr_planList = Plan::find()->where(['status'=>1])
-            ->offset($pageIndex-1)
+        $modelPlan = Plan::find()
+            ->where(['status'=>1])
+            ->andWhere(['>','start_time',date('Y-m-d')]);
+
+        //添加查询的条件
+        if(!is_null($query)){
+            $modelPlan ->andWhere(['like','destination',$query])
+            ->andWhere(['like','title',$query]);
+        }
+
+        $arr_planList = $modelPlan->offset($pageIndex-1)
             ->limit($pageSize)
             ->orderBy(['view_time'=>SORT_DESC])
             ->asArray()->all();
+
+
+        //计算出发天数
+        foreach($arr_planList as $key => $plan){
+            $arr_planList[$key]['goDays'] = floor((strtotime($plan['start_time'])-time())/(3600*24));
+        }
 
         $arr_return = array(
             'user' => $arr_user,
@@ -60,7 +78,6 @@ class IndexController extends Controller
             ]
         );
 
-        var_dump($arr_return);die();
 
         return $this ->render("index",$arr_return);
     }

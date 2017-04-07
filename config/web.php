@@ -16,10 +16,11 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true, //对url进行美化
             'showScriptName' => false,//隐藏index.php
-            'suffix' => '.html',//后缀
+//            'suffix' => '.html',//后缀
             'enableStrictParsing'=>false,//不要求网址严格匹配，则不需要输入rules
             'rules' => [
-                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>'
+                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>'
             ]//网址匹配规则
         ],
         'request' => [
@@ -71,7 +72,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+//        'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
@@ -79,6 +80,9 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
+    $config['modules']['admin'] = [
+        'class' => 'app\modules\admin',
     ];
 }
 

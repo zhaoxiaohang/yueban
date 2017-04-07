@@ -19,7 +19,7 @@ $session_user = \Yii::$app ->session -> get('user',null);
     <link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/assets/index/css/index.css">
+    <link rel="stylesheet" href="/assets/index/css/main.css">
 </head>
 <body>
 <div>
@@ -27,7 +27,7 @@ $session_user = \Yii::$app ->session -> get('user',null);
     <div class="top">
         <div>
             <a class="brand" href="/">
-                <img src="http://yueban.com/public/img/logo.png" width="84" height="29" />
+                <span style="font-size: large">结伴同行</span>
             </a>
         </div>
 
@@ -36,28 +36,22 @@ $session_user = \Yii::$app ->session -> get('user',null);
                 <li class="map-search">
                     <form action="" autocomplete="off">
                         <input type="text" name="w" placeholder="&nbsp;搜索感兴趣的地点">
-                        <button class="btn btn-link"><i class="icon-search"></i>搜索</button>
+                        <a class="brand" href="/">
+                            <img src="http://pic.sucaibar.com/pic/201307/16/33fce1b9d9_24.png"  />
+                        </a>
                     </form>
                 </li>
             </ul>
         </div>
 
         <div>
-            <?php
-            if(is_null($session_user)){
-               ?>
+            <?php if(is_null($session_user)):?>
                 <a class="login-btn" data-toggle="modal" data-target="#myModal">登陆</a>
                 <a class="register-btn" data-toggle="modal" data-target="#myModal">注册</a>
-                <?php
-            }else{
-                ?>
-                <a class="login-btn" data-toggle="modal" data-target="#myModal"><?= $session_user['name'] ?></a>
-                <a class="register-btn" data-toggle="modal" data-target="#myModal">退出</a>
-                <?php
-            }
-            ?>
-
-
+            <?php else: ?>
+                您好，欢迎你 <a href="/user/detail/<?= $session_user['id'] ?>.html"><?= $session_user['name'] ?></a>&nbsp;&nbsp;
+                <a href="<?php echo yii\helpers\Url::to(['api/user/logout'])?>">退出</a>
+            <?php endif; ?>
         </div>
     </div>
     <!--模态框-->
@@ -147,6 +141,8 @@ $session_user = \Yii::$app ->session -> get('user',null);
             </div>
         </div>
     </div>
+
+    <div class="top-next"></div>
     <!--中间内容-->
     <div class="mid">
         <?= $content ?>
@@ -217,14 +213,6 @@ $session_user = \Yii::$app ->session -> get('user',null);
                     <dd><a href="/map?q=美国">美国</a></dd>
                     <dd><a href="/map?q=巴西">巴西</a></dd>
                 </dl>
-            </div>
-        </div>
-        <div class="rel">
-            <div class="copyright">
-
-            </div>
-            <div class="friend-links">
-
             </div>
         </div>
     </div>

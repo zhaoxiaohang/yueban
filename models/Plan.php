@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "plan".
  *
@@ -68,5 +70,32 @@ class Plan extends ActiveRecord
             'view_time' => '浏览次数',
             'status' => '该计划状态',
         ];
+    }
+
+
+    public function create($newPlan){
+        $this->title = ArrayHelper::getValue($newPlan,'title');
+        $this->tel = ArrayHelper::getValue($newPlan,'tel');
+        $this->start_place = ArrayHelper::getValue($newPlan,'start_place');
+        $this->start_time = ArrayHelper::getValue($newPlan,'start_time');
+        $this->destination = ArrayHelper::getValue($newPlan,'destination');
+        $this->days = ArrayHelper::getValue($newPlan,'days');
+        $this->person_limit = ArrayHelper::getValue($newPlan,'person_limit');
+        $this->details = ArrayHelper::getValue($newPlan,'details');
+        $this->user_id = ArrayHelper::getValue($newPlan,'user_id');
+        $this->user_name = ArrayHelper::getValue($newPlan,'user_name');
+        $this->release_time = date('Y-m-d');
+        $this->view_time = 0;
+        $this->status = 1;
+
+        if($this ->validate()){
+            if($this ->save(false)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 }

@@ -7,3 +7,7 @@
  */
 ?>
 this is userInfo update page
+<?php
+    print_r($user);
+?>
+

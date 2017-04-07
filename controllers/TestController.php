@@ -15,9 +15,6 @@ use \Yii;
 
 class TestController extends Controller{
 
-    public function actionIndex(){
-
-    }
 
     //注册
     public function actionTest(){

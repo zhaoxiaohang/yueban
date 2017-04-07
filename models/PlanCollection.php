@@ -29,6 +29,7 @@ class PlanCollection extends ActiveRecord
         return [
             [['plan_id', 'user_id'], 'required'],
             [['plan_id', 'user_id'], 'integer'],
+            [['plan_id','user_id'],'unique','message'=>'已关注']
         ];
     }
 

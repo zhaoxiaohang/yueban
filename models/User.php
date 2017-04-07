@@ -35,10 +35,10 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            ['name','required','message'=>'用户名不能为空','on'=>['userReg']],
-            ['name','unique','message'=>'用户名已存在','on'=>['userReg']],
-            [['age'],'integer','message'=>'年龄应为数字'],
-            ['sex','in','range'=>[0,1,2]],
+            ['name','required','message'=>'用户名不能为空','on'=>['userReg','infoUpdate']],
+            ['name','unique','message'=>'用户名已存在','on'=>['userReg','infoUpdate']],
+            [['age'],'integer','message'=>'年龄应为数字','on'=>['infoUpdate']],
+            ['sex','in','range'=>[0,1,2],'message'=>'性别参数有误','on'=>['infoUpdate']],
             [['name', 'weixin'], 'string', 'max' => 100],
             ['tel', 'string', 'max' => 50,'on'=>['userReg']],
             ['tel', 'match','pattern'=>'/^1[34578]{1}\d{9}$/','message'=>'用户手机号有误','on'=>['userReg','login']],
@@ -47,7 +47,7 @@ class User extends ActiveRecord
             ['password','required','message'=>'密码不能为空','on'=>['userReg','login']],
             ['password','string','min'=> 7 ,'message'=>'密码长度应大于6位','on'=>['userReg','login']],
             [['introduction'], 'string'],
-            ['status','integer'],
+            ['status','integer','on'=>['changeStatus']],
         ];
     }
 
@@ -120,6 +120,39 @@ class User extends ActiveRecord
 
     }
 
+    //更新用户的个人信息（名字，年龄，性别，微信，简介）
+    public function infoUpdate($infoUpdate){
+        $this->scenario = 'infoUpdate';
+        $this->name = ArrayHelper::getValue($infoUpdate,'name',$this->name);
+        $this->age = ArrayHelper::getValue($infoUpdate,'age',$this->age);
+        $this->sex = ArrayHelper::getValue($infoUpdate,'sex',$this->sex);
+        $this->weixin = ArrayHelper::getValue($infoUpdate,'weixin',$this->weixin);
+        $this->introduction = ArrayHelper::getValue($infoUpdate,'introduction',$this->introduction);
+
+        if($this ->save()){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    //修改用户的状态，（0 为正常用户，1 锁定该用户）
+    public function changeStatus(){
+        $this ->scenario = 'changeStatus';
+
+        if($this ->status == 1){
+            $this ->status = 0;
+        }else{
+            $this ->status = 1;
+        }
+
+        if($this ->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     /**
      * todo:根据key=>value查数据库中是否已存在

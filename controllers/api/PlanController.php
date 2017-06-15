@@ -15,7 +15,7 @@ use app\models\PlanComment;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class PlanController extends Controller{
+class PlanController extends BaseController{
 
     //获取列表页
     public function actionList(){
@@ -49,7 +49,7 @@ class PlanController extends Controller{
 
             if($bool_isOK){
                 //注册完之后直接登录
-                $this ->redirect(['plan/detail/'.$newModel ->id]);
+                return MyHelper::returnArray($newModel->id);
 
             }else{
                 $arr_error = $newModel ->getFirstErrors();
@@ -286,4 +286,5 @@ class PlanController extends Controller{
                 $ex->getCode());
         }
     }
+
 }

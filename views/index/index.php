@@ -10,11 +10,11 @@
         <div class="hotPlace">
             <div>热门城市：</div>
             <ul>
-                <li><a href="">全部（10）</a></li>
+                <li><a href="">全部（<?=array_sum($hotPlace)?>）</a></li>
                 <?php
                 foreach($hotPlace as $key => $num){
                     ?>
-                    <li><a href="" data-place="<?= $key ?>"><?= $key ?>（<?= $num ?>）</a></li>
+                    <li><a class="hotPlace1" data-value="<?= $key ?>"><?= $key ?>（<?= $num ?>）</a></li>
                     <?php
                 }
                 ?>
@@ -25,22 +25,22 @@
         <div class="goTime">
             <div>出发时间：</div>
             <ul>
-                <li><a href="">全部</a></li>
-                <li><a href="">今天</a></li>
-                <li><a href="">一个月内</a></li>
-                <li><a href="">1-3个月内</a></li>
-                <li><a href="">3-5个月内</a></li>
-                <li><a href="">5个月以上</a></li>
+                <li><a class='goTime1' data-value="0">全部</a></li>
+                <li><a class='goTime1' data-value="1">今天</a></li>
+                <li><a class='goTime1' data-value="2">一个月内</a></li>
+                <li><a class='goTime1' data-value="3">3个月内</a></li>
+                <li><a class='goTime1' data-value="4">5个月内</a></li>
+                <li><a class='goTime1' data-value="5">5个月以上</a></li>
             </ul>
         </div>
         <div class="order-publish">
             <div class="order">
-                <span class="order-hot">最热结伴</span>
-                <span class="order-new">最新发布</span>
-                <span class="order-go">即将出发</span>
+                <span class="order1" data-value="1">最热结伴</span>
+                <span class="order1" data-value="2">最新发布</span>
+                <span class="order1" data-value="3">即将出发</span>
             </div>
             <div class="publish">
-                <a href="">
+                <a href="<?php echo yii\helpers\Url::to(['plan/publish']) ?>">
                     <button class="button-a" data-toggle="modal" data-target="#myModal2">发起结伴</button>
                     <i class="i-add"></i>
                 </a>
@@ -173,12 +173,11 @@
         <span class="sys-title"><b>系统通知</b>：</span>
         <div class="sys-notice">
             <ul>
-                <li><a href=""><i class="dian"></i>用户张三关注了您的出行计划</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
+                <li><a href=""><i class="dian"></i>用户张三收藏了您的出行计划</a></li>
+                <li><a href=""><i class="dian"></i>用户李四关注了您</a></li>
+                <li><a href=""><i class="dian"></i>用户张三申请结伴</a></li>
+                <li><a href=""><i class="dian"></i>用户李四申请结伴</a></li>
+                <li><a href=""><i class="dian"></i>管理员关闭了您的结伴信息</a></li>
             </ul>
         </div>
         <div>
@@ -191,11 +190,11 @@
         <div class="my-collection">
             <ul>
                 <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
-                <li><a href=""><i class="dian"></i>圣十字湖休闲深度游</a></li>
+                <li><a href=""><i class="dian"></i>一起去西藏</a></li>
+                <li><a href=""><i class="dian"></i>一起去北京</a></li>
+                <li><a href=""><i class="dian"></i>寻觅小伙伴4.2-4.8出游捷克小镇</a></li>
+                <li><a href=""><i class="dian"></i>一起去香港</a></li>
+                <li><a href=""><i class="dian"></i>测试标题	</a></li>
             </ul>
         </div>
         <div>
@@ -203,3 +202,12 @@
         </div>
     </div>
 </div>
+<script>
+    var hotPlace = <?= $condition['hotPlace'] ?>;
+    var goTime = <?= $condition['goTime'] ?>;
+    var orderBy = <?= $condition['orderBy'] ?>;
+
+
+
+
+</script>

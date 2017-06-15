@@ -45,7 +45,7 @@ class User extends ActiveRecord
             ['tel','required','message'=>'用户手机号不能为空','on'=>['userReg','login']],
             ['tel','unique','message'=>'用户手机号已存在','on'=>['userReg']],
             ['password','required','message'=>'密码不能为空','on'=>['userReg','login']],
-            ['password','string','min'=> 7 ,'message'=>'密码长度应大于6位','on'=>['userReg','login']],
+            ['password','string','min'=> 6 ,'message'=>'密码长度应大于6位','on'=>['userReg','login']],
             [['introduction'], 'string'],
             ['status','integer','on'=>['changeStatus']],
         ];

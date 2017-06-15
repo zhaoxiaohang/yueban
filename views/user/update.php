@@ -6,8 +6,5 @@
  * Time: 17:51
  */
 ?>
-this is userInfo update page
-<?php
-    print_r($user);
-?>
+
 

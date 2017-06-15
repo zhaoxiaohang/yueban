@@ -18,8 +18,11 @@ class IndexController extends Controller
     {
         $request = \Yii::$app ->request;
 
-        $query = $request ->get('query',null);
-
+        //查询条件
+        $query = $request ->get('q',null);
+        $hotPlace = $request ->get('h',null);
+        $goTime = $request ->get('t',null);
+        $orderBy = $request ->get('o',1);
         //获取session中用户id和用户名
         $session = \Yii::$app ->session;
         $arr_user = array();
@@ -53,13 +56,54 @@ class IndexController extends Controller
 
         //添加查询的条件
         if(!is_null($query)){
-            $modelPlan ->andWhere(['like','destination',$query])
-            ->andWhere(['like','title',$query]);
+            $modelPlan ->andWhere(
+                ['or',['like','title',htmlspecialchars($query)],['like','destination',htmlspecialchars($query)]]);
+        }
+
+        if(!is_null($hotPlace)){
+            $modelPlan ->andWhere(['like','destination',htmlspecialchars($hotPlace)]);
+        }
+
+        if(!is_null($goTime) && $goTime != 0){
+            switch($goTime){
+                case 1:
+                    $arr_time = ['=','start_time',date('Y-m-d')];
+                    break;
+                case 2:
+                    $arr_time = ['<','start_time',date('Y-m-d',strtotime("+1 month"))];
+                    break;
+                case 3:
+                    $arr_time = ['<','start_time',date('Y-m-d',strtotime("+3 month"))];
+                    break;
+                case 4:
+                    $arr_time = ['<','start_time',date('Y-m-d',strtotime("+5 month"))];
+                    break;
+                case 5:
+                    $arr_time = ['>','start_time',date('Y-m-d',strtotime("+5 month"))];
+                    break;
+                default:
+                    $arr_time = [];
+            }
+            $modelPlan ->andWhere($arr_time);
+        }
+
+        switch($orderBy){
+            case 1:
+                $arr_order = ['view_time'=>SORT_DESC];
+                break;
+            case 2:
+                $arr_order = ['release_time'=>SORT_DESC];
+                break;
+            case 3:
+                $arr_order = ['star_time'=>SORT_ASC];
+                break;
+            default:
+                $arr_order = ['view_time'=>SORT_DESC];
         }
 
         $arr_planList = $modelPlan->offset($pageIndex-1)
             ->limit($pageSize)
-            ->orderBy(['view_time'=>SORT_DESC])
+            ->orderBy($arr_order)
             ->asArray()->all();
 
 
@@ -69,6 +113,12 @@ class IndexController extends Controller
         }
 
         $arr_return = array(
+            'condition'=>[
+                'query' => $query,
+                'hotPlace' => $hotPlace,
+                'goTime' => $goTime,
+                'orderBy'=> $orderBy
+            ],
             'user' => $arr_user,
             'hotPlace' => $arr_hostPlace,
             'planList' => $arr_planList,
@@ -77,13 +127,6 @@ class IndexController extends Controller
                 'pageTotal' => $int_pageTotal
             ]
         );
-
-
         return $this ->render("index",$arr_return);
     }
-
-
-
-
-
 }

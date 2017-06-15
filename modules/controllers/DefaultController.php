@@ -2,6 +2,8 @@
 
 namespace app\modules\controllers;
 
+use \yii;
+use app\modules\models\Admin;
 use yii\web\Controller;
 
 /**
@@ -9,12 +11,30 @@ use yii\web\Controller;
  */
 class DefaultController extends Controller
 {
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-    public function actionIndex()
+    //管理员登录
+    public function actionLogin()
     {
-        return $this->render('index');
+        $this->layout = false;
+        $model = new Admin();
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            if ($model->login($post)) {
+                $this->redirect(['index/index']);
+                Yii::$app->end();
+            }
+        }
+        return $this->render("login", ['model' => $model]);
     }
+
+    //登出
+    public function actionLogout(){
+        Yii::$app ->session ->remove('admin');
+        if(!isset(Yii::$app->session['admin']['isLogin'])){
+            $this->redirect(['default/login']);
+            Yii::$app->end();
+        }else{
+            $this ->goBack();
+        }
+    }
+
 }

@@ -13,19 +13,16 @@ use app\models\User;
 use app\models\UserFocus;
 use yii\web\Controller;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     private $obj_user;
 
     public function init()
     {
+        parent::init();
         $this ->obj_user = new User();
     }
 
-
-    public function actionTest(){
-        \Yii::$app->cache->flush();
-    }
 
     /**
      * TODO：用户登录接口
@@ -34,11 +31,11 @@ class UserController extends Controller
     {
         try {
             $userLogin = new User();
-            if (\Yii::$app->request->isGet) {
-                $login = \Yii::$app->request->get();
+            if (\Yii::$app->request->isPost) {
+                $login = \Yii::$app->request->post();
                 if ($userLogin->login($login)) {
-                    //登录成功，直接重定向到首页
-                    $this ->redirect(['index/index']);
+
+                    return MyHelper::returnArray(null);
                 } else {
                     //登录失败，返回错误信息
                     $arr_error = $userLogin ->getFirstErrors();
@@ -76,7 +73,7 @@ class UserController extends Controller
             $obj_newUser = new User;
 
             $request = \Yii::$app->request;
-            $arr_newUser = $request->get();
+            $arr_newUser = $request->post();
 
             $bool_isOK = $obj_newUser ->reg($arr_newUser);
             if($bool_isOK){
@@ -86,15 +83,12 @@ class UserController extends Controller
                 unset($arr_newUser['password']);
                 $session['user'] = $arr_newUser;
 
-                $this ->redirect(['user/update']);
-//                return myHelper::returnArray($arr_newUser);
+                return myHelper::returnArray(null);
             }else{
                 $arr_error = $obj_newUser ->getFirstErrors();
                 $str_errorText = reset($arr_error);
                 throw new \Exception($str_errorText,1);
             }
-
-
         }catch(\Exception $e){
             return MyHelper::returnArray(
                 null,
@@ -150,7 +144,7 @@ class UserController extends Controller
                 throw new \Exception('请登录管理员账户',1000);
             }
 
-            $user_id = \Yii::$app ->request ->get('uid');
+            $user_id = \Yii::$app ->request ->get('userId');
 
             $user_model = User::findOne($user_id);
             if(is_null($user_model)){
